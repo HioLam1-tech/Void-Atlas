@@ -1,0 +1,1688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Void Atlas (Beta 0.0)</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8dW5pdmVyc2V8ZW58MHx8MHx8fDA%3D">
+
+    <style>
+        /* Sci-Fi Scrollbar */
+        html {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(34, 211, 238, 0.5) #050510;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #050510;
+            border-left: 1px solid rgba(34, 211, 238, 0.2);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(34, 211, 238, 0.4);
+            border: 1px solid #22d3ee;
+            border-radius: 0px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(34, 211, 238, 0.8);
+        }
+
+        body {
+            background-color: #050510;
+            color: #ffffff;
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        .font-sci-fi {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Starfield Animation */
+        #stars,
+        #stars2,
+        #stars3 {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 0;
+            background: transparent;
+        }
+
+        /* Generating random stars using box-shadow in JS later, but setting up the animation classes here */
+        .star-layer {
+            width: 1px;
+            height: 1px;
+            background: transparent;
+            animation: animStar 50s linear infinite;
+        }
+        .star-layer::after {
+            content: " ";
+            position: absolute;
+            top: 2000px;
+            width: 1px;
+            height: 1px;
+            background: transparent;
+        }
+
+        .star-layer-2 {
+            width: 2px;
+            height: 2px;
+            animation: animStar 100s linear infinite;
+        }
+        .star-layer-3 {
+            width: 3px;
+            height: 3px;
+            animation: animStar 150s linear infinite;
+        }
+
+        @keyframes animStar {
+            from {
+                transform: translateY(0px);
+            }
+            to {
+                transform: translateY(-2000px);
+            }
+        }
+
+        /* Sci-Fi Box Hover Effects */
+        .sci-fi-box {
+            position: relative;
+            background: rgba(10, 15, 30, 0.7);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .sci-fi-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .sci-fi-box:hover::before {
+            border-color: currentColor;
+            box-shadow: inset 0 0 20px currentColor, 0 0 20px currentColor;
+        }
+
+        .sci-fi-box::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            width: 20px;
+            height: 20px;
+            border-top: 2px solid currentColor;
+            border-left: 2px solid currentColor;
+            transition: all 0.3s ease;
+        }
+
+        .corner-br {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            width: 20px;
+            height: 20px;
+            border-bottom: 2px solid currentColor;
+            border-right: 2px solid currentColor;
+        }
+
+        /* Scanning line effect */
+        .scanline {
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(0deg, rgba(0, 255, 255, 0) 0%, rgba(0, 255, 255, 0.1) 50%, rgba(0, 255, 255, 0) 100%);
+            opacity: 0.1;
+            position: fixed;
+            bottom: 100%;
+            left: 0;
+            animation: scanline 8s linear infinite;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        @keyframes scanline {
+            0% {
+                bottom: 100%;
+            }
+            100% {
+                bottom: -100px;
+            }
+        }
+
+        /* Realistic Sun Effects */
+        .realistic-sun {
+            background: radial-gradient(circle at center, #ffffff 0%, #fff7b0 15%, #ffcc00 40%, #ff8800 80%, #ff4400 100%);
+            box-shadow: 0 0 10px #ffcc00, 0 0 25px #ff8800, 0 0 50px #ff4400, inset 0 0 10px rgba(255, 255, 255, 0.8);
+            animation: sun-pulse 3s infinite alternate ease-in-out;
+        }
+
+        .solar-flare {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 160%;
+            height: 160%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 170, 0, 0.4) 0%, rgba(255, 68, 0, 0.2) 30%, transparent 60%);
+            animation: flare-pulse 4s infinite alternate ease-in-out;
+            mix-blend-mode: screen;
+        }
+
+        @keyframes sun-pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 10px #ffcc00, 0 0 25px #ff8800, 0 0 50px #ff4400, inset 0 0 10px rgba(255, 255, 255, 0.8);
+            }
+            100% {
+                transform: scale(1.03);
+                box-shadow: 0 0 15px #ffeb66, 0 0 35px #ffaa00, 0 0 70px #ff5500, 0 0 100px rgba(255, 68, 0, 0.5), inset 0 0 15px #ffffff;
+            }
+        }
+
+        @keyframes flare-pulse {
+            0% {
+                transform: translate(-50%, -50%) scale(1) rotate(0deg);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1.1) rotate(5deg);
+                opacity: 1;
+            }
+        }
+
+        /* Hide the native details arrow marker cleanly */
+        details>summary {
+            list-style: none;
+        }
+        details>summary::-webkit-details-marker {
+            display: none;
+        }
+
+        /* 3D Solar System Front Page Schematic (Speed up version) */
+        .perspective-container {
+            perspective: 1000px;
+            transform-style: preserve-3d;
+        }
+        .solar-system-3d {
+            transform-style: preserve-3d;
+            transform: rotateX(75deg);
+        }
+        .orbit-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid rgba(34, 211, 238, 0.15);
+            border-radius: 50%;
+            transform-style: preserve-3d;
+        }
+        .orbit-belt {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 4px dashed rgba(161, 161, 170, 0.3);
+            border-radius: 50%;
+            transform-style: preserve-3d;
+            animation: spin-belt 20s linear infinite;
+        }
+        .orbit-kuiper {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 8px dashed rgba(147, 197, 253, 0.15);
+            border-radius: 50%;
+            transform-style: preserve-3d;
+            animation: spin-belt 40s linear infinite reverse;
+        }
+        .planet-pivot {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transform-style: preserve-3d;
+            border-radius: 50%;
+            animation: spin-orbit var(--duration) linear infinite;
+        }
+        .planet-sphere {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform-origin: center;
+            border-radius: 50%;
+            margin-top: calc(-1 * var(--planet-size) / 2);
+            margin-left: calc(-1 * var(--planet-size) / 2);
+            width: var(--planet-size);
+            height: var(--planet-size);
+            animation: counter-spin-orbit var(--duration) linear infinite;
+            box-shadow: inset -2px -2px 4px rgba(0, 0, 0, 0.6), 0 0 4px currentColor;
+        }
+
+        /* Real-Time Exact Telemetry Animations (Now controlled strictly by JS) */
+        .rt-planet-pivot {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform-style: preserve-3d;
+            border-radius: 50%;
+        }
+        .rt-planet-sphere {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform-origin: center;
+            border-radius: 50%;
+            margin-top: calc(-1 * var(--planet-size) / 2);
+            margin-left: calc(-1 * var(--planet-size) / 2);
+            width: var(--planet-size);
+            height: var(--planet-size);
+            box-shadow: inset -2px -2px 4px rgba(0, 0, 0, 0.6), 0 0 4px currentColor;
+        }
+
+        @keyframes spin-belt {
+            0% {
+                transform: translate(-50%, -50%) rotateZ(0deg);
+            }
+            100% {
+                transform: translate(-50%, -50%) rotateZ(360deg);
+            }
+        }
+        @keyframes spin-orbit {
+            0% {
+                transform: translate(-50%, -50%) rotateZ(0deg);
+            }
+            100% {
+                transform: translate(-50%, -50%) rotateZ(360deg);
+            }
+        }
+        @keyframes counter-spin-orbit {
+            0% {
+                transform: rotateZ(0deg) rotateX(-75deg);
+            }
+            100% {
+                transform: rotateZ(-360deg) rotateX(-75deg);
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen w-full relative flex flex-col">
+
+    <!-- Background Stars -->
+    <div id="stars" class="star-layer"></div>
+    <div id="stars2" class="star-layer star-layer-2"></div>
+    <div id="stars3" class="star-layer star-layer-3"></div>
+    <div class="scanline"></div>
+
+    <!-- VIEW 1: LANDING PAGE -->
+    <div id="view-landing" class="relative z-10 w-full flex-grow flex flex-col items-center pt-8 md:pt-16 p-6 transition-all duration-500">
+
+        <!-- Systems Container -->
+        <div id="systems-container" class="w-full max-w-[1200px] grid grid-cols-1 md:grid-cols-2 gap-8 transition-all duration-500">
+
+            <!-- System Box 1: Solar System -->
+            <button id="btn-init-system" style="color: inherit;" class="sci-fi-box text-cyan-400 border-t border-l border-white/10 rounded-sm p-6 flex flex-col justify-between min-h-[320px] w-full shadow-lg group cursor-pointer hover:scale-105 hover:shadow-[0_0_30px_rgba(34,211,238,0.2)] transition-all duration-500 text-left">
+
+                <!-- Top Section: Data Headers -->
+                <div class="flex justify-between items-start mb-4 border-b border-white/10 pb-2 w-full z-20">
+                    <div>
+                        <h2 class="text-2xl font-sci-fi font-bold tracking-widest uppercase drop-shadow-[0_0_8px_currentColor]">Solar System</h2>
+                        <p class="text-[10px] text-cyan-400/70 font-mono uppercase mt-1">DIST FROM EARTH: 0 km (LOCAL)</p>
+                    </div>
+                    <span class="text-xs font-mono opacity-50">SOL-DATA</span>
+                </div>
+
+                <!-- Middle Section: 3D Solar System Schematic -->
+                <div class="flex-grow flex flex-col items-center justify-center relative w-full py-2 overflow-hidden perspective-container pointer-events-none">
+
+                    <!-- 3D Wrapper -->
+                    <div class="solar-system-3d w-full h-40 relative flex items-center justify-center">
+
+                        <!-- Glowing Center Sun -->
+                        <div class="absolute top-1/2 left-1/2 z-20" style="transform: translate(-50%, -50%) rotateX(-75deg);">
+                            <div class="w-8 h-8 rounded-full realistic-sun shadow-[0_0_15px_#ff8800]"></div>
+                        </div>
+
+                        <!-- Inner Planets -->
+                        <!-- Mercury -->
+                        <div class="orbit-ring w-[40px] h-[40px]"></div>
+                        <div class="planet-pivot w-[40px] h-[40px]" style="--duration: 1.5s;">
+                            <div class="planet-sphere bg-gray-400 text-gray-400" style="--planet-size: 4px; --duration: 1.5s;"></div>
+                        </div>
+
+                        <!-- Venus -->
+                        <div class="orbit-ring w-[70px] h-[70px]"></div>
+                        <div class="planet-pivot w-[70px] h-[70px]" style="--duration: 2.5s;">
+                            <div class="planet-sphere bg-orange-400 text-orange-400" style="--planet-size: 6px; --duration: 2.5s;"></div>
+                        </div>
+
+                        <!-- Earth -->
+                        <div class="orbit-ring w-[100px] h-[100px]"></div>
+                        <div class="planet-pivot w-[100px] h-[100px]" style="--duration: 4s;">
+                            <div class="planet-sphere bg-blue-400 text-blue-400" style="--planet-size: 8px; --duration: 4s;"></div>
+                        </div>
+
+                        <!-- Mars -->
+                        <div class="orbit-ring w-[130px] h-[130px]"></div>
+                        <div class="planet-pivot w-[130px] h-[130px]" style="--duration: 6s;">
+                            <div class="planet-sphere bg-red-500 text-red-500" style="--planet-size: 6px; --duration: 6s;"></div>
+                        </div>
+
+                        <!-- Asteroid Belt -->
+                        <div class="orbit-belt w-[170px] h-[170px]"></div>
+
+                        <!-- Outer Planets -->
+                        <!-- Jupiter -->
+                        <div class="orbit-ring w-[220px] h-[220px]"></div>
+                        <div class="planet-pivot w-[220px] h-[220px]" style="--duration: 12s;">
+                            <div class="planet-sphere bg-amber-500 text-amber-500 flex flex-col justify-evenly overflow-hidden" style="--planet-size: 14px; --duration: 12s;">
+                                <div class="w-full h-[1px] bg-amber-700/50"></div>
+                            </div>
+                        </div>
+
+                        <!-- Saturn -->
+                        <div class="orbit-ring w-[270px] h-[270px]"></div>
+                        <div class="planet-pivot w-[270px] h-[270px]" style="--duration: 20s;">
+                            <div class="absolute top-0 left-[50%] w-6 h-6 -ml-3 -mt-3 border-[2px] border-yellow-200/60 rounded-full"></div>
+                            <div class="planet-sphere bg-yellow-200 text-yellow-200" style="--planet-size: 12px; --duration: 20s;"></div>
+                        </div>
+
+                        <!-- Uranus -->
+                        <div class="orbit-ring w-[320px] h-[320px]"></div>
+                        <div class="planet-pivot w-[320px] h-[320px]" style="--duration: 30s;">
+                            <div class="planet-sphere bg-cyan-300 text-cyan-300" style="--planet-size: 10px; --duration: 30s;"></div>
+                        </div>
+
+                        <!-- Neptune -->
+                        <div class="orbit-ring w-[370px] h-[370px]"></div>
+                        <div class="planet-pivot w-[370px] h-[370px]" style="--duration: 45s;">
+                            <div class="planet-sphere bg-blue-600 text-blue-600" style="--planet-size: 10px; --duration: 45s;"></div>
+                        </div>
+
+                        <!-- Kuiper Belt -->
+                        <div class="orbit-kuiper w-[420px] h-[420px]"></div>
+
+                    </div>
+                </div>
+
+                <div class="text-center mt-2 z-20">
+                    <div class="text-[11px] font-mono text-cyan-400/70 animate-pulse uppercase tracking-widest px-3 py-1">
+                        [ Click to Initialize ]
+                    </div>
+                </div>
+
+                <!-- Bottom Right Corner Deco -->
+                <div class="corner-br"></div>
+            </button>
+
+            <!-- System Box 2: Alpha Centauri (Developing) -->
+            <button id="btn-alpha-centauri" style="color: inherit;" class="sci-fi-box text-purple-400 border-t border-l border-white/10 rounded-sm p-6 flex flex-col justify-between min-h-[320px] w-full shadow-lg group opacity-80 hover:opacity-100 cursor-pointer hover:scale-105 hover:shadow-[0_0_30px_rgba(192,132,252,0.2)] transition-all duration-500 relative text-left">
+
+                <!-- Top Section: Data Headers -->
+                <div class="flex justify-between items-start mb-4 border-b border-white/10 pb-2 w-full z-20">
+                    <div>
+                        <h2 class="text-2xl font-sci-fi font-bold tracking-widest uppercase drop-shadow-[0_0_8px_currentColor]">Alpha Centauri</h2>
+                        <p class="text-[10px] text-purple-400/70 font-mono uppercase mt-1">DIST FROM EARTH: 4.37 LY</p>
+                    </div>
+                    <span class="text-xs font-mono opacity-50">ACI-DATA</span>
+                </div>
+
+                <!-- Middle Section: "Developing" Status -->
+                <div class="flex-grow flex flex-col items-center justify-center space-y-4 my-4 relative w-full">
+                    <!-- Tailwind Spinner -->
+                    <div class="w-10 h-10 border-[3px] border-white/10 border-t-current rounded-full animate-spin mb-2"></div>
+                    <div class="text-center">
+                        <p class="flex items-center justify-center font-sci-fi text-sm md:text-base tracking-[0.2em] text-white font-bold drop-shadow-[0_0_5px_rgba(255,255,255,0.8)] animate-pulse">
+                            <!-- SVG Warning Icon -->
+                            <svg class="w-5 h-5 text-red-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                            DEVELOPING...
+                        </p>
+                        <div class="mt-2 text-[10px] font-mono text-purple-400/60 uppercase tracking-widest">
+                            Awaiting Telemetry
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Right Corner Deco -->
+                <div class="corner-br border-b-purple-400/50 border-r-purple-400/50"></div>
+            </button>
+        </div>
+
+        <!-- Options (Hidden initially) -->
+        <div id="nav-options" class="hidden flex-col items-center w-full max-w-[1200px] opacity-0 transition-opacity duration-500 mt-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+                <!-- Changed to Current Place Trigger -->
+                <button id="btn-opt-current-place" class="sci-fi-box w-full text-green-400 border-t border-l border-green-400/50 rounded-sm p-8 flex flex-col justify-center items-center min-h-[220px] text-center cursor-pointer hover:bg-green-900/20 hover:scale-[1.02] transition-all duration-300 group shadow-[0_0_15px_rgba(74,222,128,0.1)]">
+                    <div class="corner-br border-green-400/50"></div>
+                    <span class="font-sci-fi text-2xl tracking-widest uppercase group-hover:drop-shadow-[0_0_8px_currentColor]">Planets Current Place</span>
+                    <p class="text-xs font-mono mt-3 opacity-70 uppercase tracking-widest">(Real-Time Telemetry)</p>
+                </button>
+
+                <button id="btn-opt-grid" class="sci-fi-box w-full text-cyan-400 border-t border-l border-cyan-400/50 rounded-sm p-8 flex flex-col justify-center items-center min-h-[220px] text-center cursor-pointer hover:bg-cyan-900/20 hover:scale-[1.02] transition-all duration-300 group shadow-[0_0_15px_rgba(34,211,238,0.1)]">
+                    <div class="corner-br border-cyan-400/50"></div>
+                    <span class="font-sci-fi text-2xl tracking-widest uppercase group-hover:drop-shadow-[0_0_8px_currentColor]">Stellar Database</span>
+                    <p class="text-xs font-mono mt-3 opacity-70 uppercase tracking-widest">(View Planet Grid)</p>
+                </button>
+            </div>
+
+            <!-- Go Back Button to Reset State -->
+            <button id="btn-back-to-start" class="mt-10 text-cyan-400 font-mono text-sm tracking-widest hover:text-cyan-200 transition-colors uppercase border-b border-cyan-400/30 pb-1">
+                [ < Go Back ]
+            </button>
+        </div>
+
+    </div>
+
+    <!-- VIEW 2: DEVELOPING PAGE (For Alpha Centauri) -->
+    <div id="view-developing" class="hidden relative z-10 w-full flex-grow flex-col items-center justify-center p-6">
+        <div class="sci-fi-box text-red-500 border-t border-l border-red-500/50 rounded-sm p-12 flex flex-col items-center justify-center shadow-[0_0_30px_rgba(239,68,68,0.2)]">
+            <div class="corner-br border-red-500/50"></div>
+            <!-- Tailwind Spinner -->
+            <div class="w-16 h-16 border-[4px] border-white/10 border-t-current rounded-full animate-spin mb-6"></div>
+            <h2 class="flex items-center text-3xl md:text-5xl font-sci-fi font-bold tracking-widest uppercase drop-shadow-[0_0_15px_currentColor] animate-pulse text-center">
+                <!-- SVG Warning Icon -->
+                <svg class="w-10 h-10 md:w-12 md:h-12 text-red-500 mr-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                Developing...
+            </h2>
+            <p class="text-sm font-mono mt-6 text-red-400/70 uppercase tracking-widest">Planetary positioning system offline</p>
+        </div>
+        <button class="btn-back mt-12 text-cyan-400 font-mono text-sm tracking-widest hover:text-cyan-200 transition-colors uppercase border-b border-cyan-400/30 pb-1">
+            [ Return to Main Menu ]
+        </button>
+    </div>
+
+    <!-- VIEW 2.5: REAL TIME CURRENT PLANET PLACES -->
+    <div id="view-current-place" class="hidden relative z-10 w-full flex-grow flex-col items-center justify-center p-6 pt-12">
+        <div id="rt-box" class="w-full max-w-[1000px] sci-fi-box bg-green-900/10 border-t border-l border-green-400/50 rounded-sm p-8 md:p-12 shadow-[0_0_30px_rgba(74,222,128,0.15)] relative flex flex-col items-center justify-center min-h-[500px] md:min-h-[600px] overflow-hidden transition-all duration-500 select-none">
+
+            <!-- Full Screen Toggle Button -->
+            <button id="btn-rt-fullscreen" class="absolute top-6 left-6 md:left-8 font-mono text-cyan-400 text-xs tracking-widest hover:text-cyan-200 transition-colors z-50 uppercase border-b border-cyan-400/30 pb-1">
+                [ Full Screen ]
+            </button>
+
+            <!-- Live Clock Display -->
+            <div id="rt-clock-container" class="absolute top-6 right-6 md:right-8 text-right hidden md:block pointer-events-none">
+                <div id="rt-clock-display" class="font-mono text-green-400/80 text-sm tracking-widest">--:--:-- UTC</div>
+                <div class="font-mono text-green-500/50 text-[10px] mt-1 tracking-widest uppercase">Syncing Keplerian Orbits</div>
+            </div>
+
+            <!-- Header Text Container (Moved lower to absolute top-24) -->
+            <div id="rt-header-wrapper" class="absolute top-20 md:top-24 left-0 w-full flex flex-col items-center pointer-events-none z-20">
+                <h2 id="rt-title" class="text-2xl md:text-4xl font-sci-fi text-green-400 tracking-widest uppercase drop-shadow-[0_0_8px_rgba(74,222,128,0.5)] mb-2 text-center pointer-events-none">
+                    Real-Time Telemetry
+                </h2>
+                <p id="rt-hint" class="font-mono text-green-400/50 text-[10px] md:text-xs tracking-[0.2em] uppercase text-center animate-pulse pointer-events-none">
+                    [ Right-Click & Drag to Tilt | Scroll to Zoom ]
+                </p>
+            </div>
+
+            <!-- Zoom Wrapper for Scroll to Zoom Mechanics -->
+            <div id="rt-zoom-wrapper" class="absolute inset-0 flex items-center justify-center pointer-events-none z-10" style="transform-origin: 0 0; will-change: transform;">
+                <!-- Exact Match of 3D Solar System (Using Real-Time Classes) -->
+                <div class="perspective-container w-full relative flex items-center justify-center scale-[0.8] sm:scale-100 md:scale-125 lg:scale-[1.4] transition-transform duration-500">
+                    <div id="rt-system-container" class="solar-system-3d w-full h-40 relative flex items-center justify-center">
+
+                        <!-- Glowing Center Sun -->
+                        <div id="rt-sun-wrapper" class="absolute top-1/2 left-1/2 z-20" style="transform: translate(-50%, -50%) rotateX(-75deg);">
+                            <div class="w-8 h-8 rounded-full realistic-sun shadow-[0_0_15px_#ff8800]"></div>
+                        </div>
+
+                        <!-- Mercury -->
+                        <div class="orbit-ring w-[40px] h-[40px]"></div>
+                        <div class="rt-planet-pivot w-[40px] h-[40px]" data-planet="mercury">
+                            <div class="rt-planet-sphere bg-gray-400 text-gray-400" style="--planet-size: 4px;"></div>
+                        </div>
+
+                        <!-- Venus -->
+                        <div class="orbit-ring w-[70px] h-[70px]"></div>
+                        <div class="rt-planet-pivot w-[70px] h-[70px]" data-planet="venus">
+                            <div class="rt-planet-sphere bg-orange-400 text-orange-400" style="--planet-size: 6px;"></div>
+                        </div>
+
+                        <!-- Earth -->
+                        <div class="orbit-ring w-[100px] h-[100px]"></div>
+                        <div class="rt-planet-pivot w-[100px] h-[100px]" data-planet="earth">
+                            <div class="rt-planet-sphere bg-blue-400 text-blue-400" style="--planet-size: 8px;"></div>
+                        </div>
+
+                        <!-- Mars -->
+                        <div class="orbit-ring w-[130px] h-[130px]"></div>
+                        <div class="rt-planet-pivot w-[130px] h-[130px]" data-planet="mars">
+                            <div class="rt-planet-sphere bg-red-500 text-red-500" style="--planet-size: 6px;"></div>
+                        </div>
+
+                        <!-- Asteroid Belt -->
+                        <div class="orbit-belt w-[170px] h-[170px]"></div>
+
+                        <!-- Jupiter -->
+                        <div class="orbit-ring w-[220px] h-[220px]"></div>
+                        <div class="rt-planet-pivot w-[220px] h-[220px]" data-planet="jupiter">
+                            <div class="rt-planet-sphere bg-amber-500 text-amber-500 flex flex-col justify-evenly overflow-hidden" style="--planet-size: 14px;">
+                                <div class="w-full h-[1px] bg-amber-700/50"></div>
+                            </div>
+                        </div>
+
+                        <!-- Saturn -->
+                        <div class="orbit-ring w-[270px] h-[270px]"></div>
+                        <div class="rt-planet-pivot w-[270px] h-[270px]" data-planet="saturn">
+                            <!-- Saturn's Rings staying perfectly flat on the orbital plane -->
+                            <div class="absolute top-0 left-[50%] w-6 h-6 -ml-3 -mt-3 border-[2px] border-yellow-200/60 rounded-full"></div>
+                            <div class="rt-planet-sphere bg-yellow-200 text-yellow-200" style="--planet-size: 12px;"></div>
+                        </div>
+
+                        <!-- Uranus -->
+                        <div class="orbit-ring w-[320px] h-[320px]"></div>
+                        <div class="rt-planet-pivot w-[320px] h-[320px]" data-planet="uranus">
+                            <div class="rt-planet-sphere bg-cyan-300 text-cyan-300" style="--planet-size: 10px;"></div>
+                        </div>
+
+                        <!-- Neptune -->
+                        <div class="orbit-ring w-[370px] h-[370px]"></div>
+                        <div class="rt-planet-pivot w-[370px] h-[370px]" data-planet="neptune">
+                            <div class="rt-planet-sphere bg-blue-600 text-blue-600" style="--planet-size: 10px;"></div>
+                        </div>
+
+                        <!-- Kuiper Belt -->
+                        <div class="orbit-kuiper w-[420px] h-[420px]"></div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Details -->
+            <div id="rt-footer" class="absolute top-6 md:bottom-6 md:top-auto left-8 font-mono text-green-500/50 text-[10px] md:text-xs z-20 space-y-1 hidden md:block pointer-events-none">
+                <p>SIMULATION SPEED: <span id="rt-speed-text" class="text-green-400 font-bold">1.0x (REAL-TIME)</span></p>
+                <p>POSITIONS: <span class="text-green-400 font-bold">EXACT (MEAN LONGITUDE J2000)</span></p>
+            </div>
+
+            <!-- Time Control UI -->
+            <div id="rt-time-controls" class="absolute bottom-6 w-full flex justify-center z-30">
+                <div class="flex items-center gap-1 md:gap-2 bg-green-900/30 border border-green-500/30 p-2 rounded-sm backdrop-blur-sm">
+                    <button id="btn-time-1x" class="px-2 py-1 md:px-3 font-mono text-[10px] md:text-xs text-green-400 bg-green-500/20 hover:bg-green-500/40 transition-colors rounded-sm">1x</button>
+                    <button id="btn-time-week" class="px-2 py-1 md:px-3 font-mono text-[10px] md:text-xs text-green-400 bg-transparent border border-green-500/30 hover:bg-green-500/20 transition-colors rounded-sm">1 Wk/s</button>
+                    <button id="btn-time-month" class="px-2 py-1 md:px-3 font-mono text-[10px] md:text-xs text-green-400 bg-transparent border border-green-500/30 hover:bg-green-500/20 transition-colors rounded-sm">1 Mo/s</button>
+                    <button id="btn-time-year" class="px-2 py-1 md:px-3 font-mono text-[10px] md:text-xs text-green-400 bg-transparent border border-green-500/30 hover:bg-green-500/20 transition-colors rounded-sm">1 Yr/s</button>
+                    <div class="w-px h-4 bg-green-500/50 mx-1 md:mx-2"></div>
+                    <button id="btn-time-reset" class="px-2 py-1 md:px-3 font-mono text-[10px] md:text-xs text-green-900 bg-green-400 hover:bg-green-300 font-bold transition-colors rounded-sm">RESET NOW</button>
+                </div>
+            </div>
+
+            <div id="rt-corner" class="corner-br border-green-400/50 pointer-events-none"></div>
+        </div>
+
+        <button id="btn-back-from-rt" class="mt-10 text-cyan-400 font-mono text-sm tracking-widest hover:text-cyan-200 transition-colors uppercase border-b border-cyan-400/30 pb-1">
+            [ < Back to Main Menu ]
+        </button>
+    </div>
+
+    <!-- VIEW 3: Main Content Container (Existing Grid) -->
+    <div id="view-grid" class="hidden relative z-10 w-full flex-grow p-6 flex-col">
+
+        <div class="w-full max-w-[1800px] mx-auto mb-4 flex justify-between items-center">
+            <button class="btn-back text-cyan-400 font-mono text-sm tracking-widest hover:text-cyan-200 transition-colors uppercase border-b border-cyan-400/30 pb-1">
+                [ < Return ]
+            </button>
+            <span class="text-cyan-400/50 font-mono text-[10px] md:text-xs tracking-[0.1em] uppercase text-right">
+                1 AU = 149 597 871 KM
+            </span>
+        </div>
+
+        <!-- Header -->
+        <header class="w-full text-center mb-10 mt-4">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl text-cyan-400 font-black tracking-widest uppercase drop-shadow-[0_0_15px_rgba(34,211,238,0.8)]">
+                Stellar Database
+            </h1>
+            <p class="text-cyan-200/70 tracking-[0.3em] mt-2 text-sm uppercase">Solar System Initialization</p>
+            <p class="text-xs font-mono text-cyan-400/50 mt-4 uppercase animate-pulse">[ Select a celestial body for telemetry ]</p>
+        </header>
+
+        <!-- Dynamic Grid Container -->
+        <main id="solar-system-grid" class="w-full max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 pb-12">
+            <!-- JavaScript will populate the boxes here -->
+        </main>
+
+    </div>
+
+    <!-- VIEW 4: SUN DATA OPTIONS -->
+    <div id="view-sun-menu" class="hidden relative z-10 w-full flex-grow flex-col items-center justify-center p-6">
+        <h2 class="text-4xl font-sci-fi text-yellow-400 mb-8 uppercase tracking-widest drop-shadow-[0_0_15px_rgba(250,204,21,0.5)]">
+            Sun Data Core
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-[800px]">
+            <!-- Basic Option -->
+            <button id="btn-sun-basic" class="sci-fi-box w-full text-yellow-300 border-t border-l border-yellow-300/50 rounded-sm p-8 flex flex-col justify-center items-center min-h-[180px] text-center cursor-pointer hover:bg-yellow-900/20 hover:scale-[1.02] transition-all duration-300 group shadow-[0_0_15px_rgba(253,224,71,0.1)]">
+                <div class="corner-br border-yellow-300/50"></div>
+                <span class="font-sci-fi text-2xl tracking-widest uppercase group-hover:drop-shadow-[0_0_8px_currentColor]">Basic ☕</span>
+                <p class="text-xs font-mono mt-3 opacity-70 uppercase tracking-widest">More easy words, basic knowledge</p>
+            </button>
+
+            <!-- Advanced Option -->
+            <button id="btn-sun-advanced" class="sci-fi-box w-full text-yellow-500 border-t border-l border-yellow-500/50 rounded-sm p-8 flex flex-col justify-center items-center min-h-[180px] text-center cursor-pointer hover:bg-yellow-900/20 hover:scale-[1.02] transition-all duration-300 group shadow-[0_0_15px_rgba(234,179,8,0.1)]">
+                <div class="corner-br border-yellow-500/50"></div>
+                <span class="font-sci-fi text-2xl tracking-widest uppercase group-hover:drop-shadow-[0_0_8px_currentColor]">Advanced 🧠</span>
+                <p class="text-xs font-mono mt-3 opacity-70 uppercase tracking-widest">Full mankind knowledge, complicated</p>
+            </button>
+        </div>
+
+        <button id="btn-back-to-grid" class="mt-12 text-cyan-400 font-mono text-sm tracking-widest hover:text-cyan-200 transition-colors uppercase border-b border-cyan-400/30 pb-1">
+            [ < Return to Database ]
+        </button>
+    </div>
+
+    <!-- VIEW 5: DATA READOUT -->
+    <div id="view-sun-data" class="hidden relative z-10 w-full flex-grow flex-col items-center p-6 pt-12 md:pt-20">
+        <div class="w-full max-w-[900px] sci-fi-box bg-yellow-900/10 border-t border-l border-yellow-400/50 rounded-sm p-8 md:p-12 shadow-[0_0_30px_rgba(250,204,21,0.15)] relative flex flex-col min-h-[400px]">
+            <div class="corner-br border-yellow-400/50"></div>
+
+            <!-- Data Header -->
+            <div class="flex justify-between items-end border-b border-yellow-400/30 pb-4 mb-6">
+                <h2 id="sun-data-title" class="text-2xl md:text-4xl font-sci-fi text-yellow-400 tracking-widest uppercase drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]">
+                    --
+                </h2>
+            </div>
+
+            <!-- Content Area injected by JS -->
+            <div id="sun-data-content" class="font-mono text-sm md:text-base text-yellow-100/90 space-y-6 leading-relaxed tracking-wide flex-grow">
+                --
+            </div>
+
+            <!-- Pagination Container (Injected by JS for Advanced View) -->
+            <div id="pagination-container" class="hidden justify-center items-center gap-2 mt-8 border-t border-yellow-500/30 pt-6 flex-wrap">
+                <!-- Buttons injected here -->
+            </div>
+        </div>
+
+        <button id="btn-back-to-sun-menu" class="mt-10 text-yellow-400 font-mono text-sm tracking-widest hover:text-yellow-200 transition-colors uppercase border-b border-yellow-400/30 pb-1">
+            [ < Back to Data Core ]
+        </button>
+    </div>
+
+    <script>
+        // Data for the Sun and 8 Planets (with system IDs)
+        const celestialBodies = [
+            { id: 'sun', name: 'The Sun', type: 'Class G Main-Sequence Star', colorClass: 'text-yellow-400', borderClass: 'border-yellow-400', distance: '1 AU', sysId: 'SOL-MAIN' },
+            { id: 'mercury', name: 'Mercury', type: 'Terrestrial Planet', colorClass: 'text-gray-400', borderClass: 'border-gray-400', distance: '91.7 Million km', sysId: 'SOL-01' },
+            { id: 'venus', name: 'Venus', type: 'Terrestrial Planet', colorClass: 'text-orange-400', borderClass: 'border-orange-400', distance: '41.4 Million km', sysId: 'SOL-02' },
+            { id: 'earth', name: 'Earth', type: 'Terrestrial Planet', colorClass: 'text-blue-400', borderClass: 'border-blue-400', distance: '0 km', sysId: 'SOL-03' },
+            { id: 'mars', name: 'Mars', type: 'Terrestrial Planet', colorClass: 'text-red-500', borderClass: 'border-red-500', distance: '78.3 Million km', sysId: 'SOL-04' },
+            { id: 'jupiter', name: 'Jupiter', type: 'Gas Giant', colorClass: 'text-amber-500', borderClass: 'border-amber-500', distance: '4.2 AU', sysId: 'SOL-05' },
+            { id: 'saturn', name: 'Saturn', type: 'Gas Giant', colorClass: 'text-yellow-200', borderClass: 'border-yellow-200', distance: '8.5 AU', sysId: 'SOL-06' },
+            { id: 'uranus', name: 'Uranus', type: 'Ice Giant', colorClass: 'text-cyan-300', borderClass: 'border-cyan-300', distance: '18.2 AU', sysId: 'SOL-07' },
+            { id: 'neptune', name: 'Neptune', type: 'Ice Giant', colorClass: 'text-blue-600', borderClass: 'border-blue-600', distance: '29.1 AU', sysId: 'SOL-08' }
+        ];
+
+        // Basic Data Pages Array
+        const basicPage1 = `
+                <div class="space-y-6">
+                    <h3 class="text-xl md:text-2xl font-sci-fi text-yellow-300 mb-4 border-b border-yellow-400/30 pb-2">What It Is</h3>
+                    <ul class="list-disc list-inside space-y-4 text-yellow-100/90 marker:text-yellow-400 text-base md:text-lg">
+                        <li class="leading-relaxed">A <span class="text-yellow-400 font-bold">star</span> — a huge, glowing ball of hot plasma. It’s the center of our solar system and holds 99.86% of all the mass in it.</li>
+                    </ul>
+                </div>
+            `;
+
+        const basicPage2 = `
+                <div class="space-y-4">
+                    <h3 class="text-xl md:text-2xl font-sci-fi text-yellow-300 mb-4 border-b border-yellow-400/30 pb-2">Basic Stats</h3>
+                    <ul class="list-disc list-inside space-y-4 text-yellow-100/90 marker:text-yellow-400 text-base md:text-lg">
+                        <li><span class="text-yellow-400 font-bold">Diameter:</span> 109 × Earth</li>
+                        <li><span class="text-yellow-400 font-bold">Mass:</span> 333,000 × Earth</li>
+                        <li><span class="text-yellow-400 font-bold">Surface temperature:</span> ~5,500 °C</li>
+                        <li><span class="text-yellow-400 font-bold">Core temperature:</span> ~15 million °C</li>
+                        <li><span class="text-yellow-400 font-bold">Age:</span> 4.6 billion years (middle-aged for a star)</li>
+                    </ul>
+                </div>
+            `;
+
+        const basicPage3 = `
+                <div class="space-y-6">
+                    <h3 class="text-xl md:text-2xl font-sci-fi text-yellow-300 mb-4 border-b border-yellow-400/30 pb-2">Composition</h3>
+                    <ul class="list-disc list-inside space-y-4 text-yellow-100/90 marker:text-yellow-400 text-base md:text-lg">
+                        <li class="leading-relaxed">Mostly <span class="text-yellow-400 font-bold">hydrogen (~74%)</span> and <span class="text-yellow-400 font-bold">helium (~24%)</span>. The rest are traces of heavier elements (oxygen, carbon, iron, etc.).</li>
+                    </ul>
+                </div>
+            `;
+
+        const basicPage4 = `
+                <div class="space-y-6">
+                    <h3 class="text-xl md:text-2xl font-sci-fi text-yellow-300 mb-4 border-b border-yellow-400/30 pb-2">Power Source — Nuclear Fusion</h3>
+                    <p class="text-yellow-100/90 text-base md:text-lg leading-relaxed">
+                        In the core, hydrogen is fused into helium. This turns a tiny bit of mass into enormous energy (E=mc²), which we receive as light and heat.
+                    </p>
+                    <p class="text-yellow-100/90 text-base md:text-lg leading-relaxed mt-4">
+                        <span class="text-yellow-400 font-bold">Every second</span>, 4 million tons of matter become energy.
+                    </p>
+                </div>
+            `;
+
+        const basicPage5 = `
+                <div class="space-y-6">
+                    <h3 class="text-xl md:text-2xl font-sci-fi text-yellow-300 mb-4 border-b border-yellow-400/30 pb-2">Layers (Outside-In)</h3>
+                    <ul class="list-disc list-inside space-y-4 text-yellow-100/90 marker:text-yellow-400 text-base md:text-lg">
+                        <li><span class="text-yellow-400 font-bold">Corona</span> – hot, thin outer atmosphere (seen during eclipses)</li>
+                        <li><span class="text-yellow-400 font-bold">Chromosphere</span> – reddish layer above the photosphere</li>
+                        <li><span class="text-yellow-400 font-bold">Photosphere</span> – the bright surface we see</li>
+                        <li><span class="text-yellow-400 font-bold">Convective Zone</span> – boiling plasma carries energy up</li>
+                        <li><span class="text-yellow-400 font-bold">Radiative Zone</span> – energy moves as light</li>
+                        <li><span class="text-yellow-400 font-bold">Core</span> – where fusion happens</li>
+                    </ul>
+                </div>
+            `;
+
+        const basicPage6 = `
+                <div class="space-y-6">
+                    <h3 class="text-xl md:text-2xl font-sci-fi text-yellow-300 mb-4 border-b border-yellow-400/30 pb-2">Solar Wind and Space Weather</h3>
+                    <ul class="list-disc list-inside space-y-4 text-yellow-100/90 marker:text-yellow-400 text-base md:text-lg">
+                        <li class="leading-relaxed">The Sun constantly blows a stream of charged particles. Big solar flares or coronal mass ejections can cause aurorae, disrupt satellites, and affect power grids.</li>
+                    </ul>
+                </div>
+            `;
+
+        const basicPage7 = `
+                <div class="space-y-6">
+                    <h3 class="text-xl md:text-2xl font-sci-fi text-yellow-300 mb-4 border-b border-yellow-400/30 pb-2">Role for Earth</h3>
+                    <ul class="list-disc list-inside space-y-4 text-yellow-100/90 marker:text-yellow-400 text-base md:text-lg">
+                        <li class="leading-relaxed">Source of almost all energy — drives weather, climate, ocean currents, and photosynthesis (the base of food chains).</li>
+                        <li class="leading-relaxed">Its gravity keeps Earth in orbit.</li>
+                        <li class="leading-relaxed">The Earth’s tilt + orbit creates seasons.</li>
+                        <li class="leading-relaxed">Perfect coincidence: the Sun is 400× wider than the Moon, but also ~400× farther away — that’s why we can have total solar eclipses.</li>
+                    </ul>
+                </div>
+            `;
+
+        const basicPage8 = `
+                <div class="space-y-6">
+                    <h3 class="text-xl md:text-2xl font-sci-fi text-yellow-300 mb-4 border-b border-yellow-400/30 pb-2">Ultimate Fate</h3>
+                    <ul class="list-disc list-inside space-y-4 text-yellow-100/90 marker:text-yellow-400 text-base md:text-lg">
+                        <li class="leading-relaxed">In about 5 billion years, the Sun will run out of hydrogen fuel, swell into a red giant (engulfing Mercury and Venus), then shed its outer layers and end as a white dwarf — slowly cooling for billions of years.</li>
+                    </ul>
+                </div>
+            `;
+
+        const sunBasicPages = [
+            basicPage1, basicPage2, basicPage3, basicPage4,
+            basicPage5, basicPage6, basicPage7, basicPage8
+        ];
+
+        // Advanced Data Pages Array
+        const page1 = `
+                <div class="space-y-6">
+                    <h3 class="text-xl md:text-2xl font-sci-fi text-yellow-400 mb-4 border-b border-yellow-500/30 pb-2">Astronomical Identity</h3>
+                    <p><span class="text-yellow-500 font-bold">Classification:</span> G-type main-sequence star (G2V). The "G2" denotes its surface temperature (~5,800 K), "V" its luminosity class—a dwarf star in the prime of hydrogen-fusing life.</p>
+                    <p><span class="text-yellow-500 font-bold">Location:</span> In the Orion-Cygnus Arm of the Milky Way, roughly 26,000 light-years from the galactic center. It orbits the galaxy once every ~225–250 million years (a "cosmic year").</p>
+                    <p><span class="text-yellow-500 font-bold">Companions:</span> The Sun contains 99.86% of the solar system's total mass. Its gravitational leash holds eight planets, dwarf planets, moons, asteroids, comets, and dust.</p>
+                </div>
+            `;
+
+        const page2 = `
+                <div class="space-y-4">
+                    <h3 class="text-xl md:text-2xl font-sci-fi text-yellow-400 mb-4 border-b border-yellow-500/30 pb-2">2. Vital Statistics</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3 text-sm md:text-base border border-yellow-500/30 p-4 md:p-6 bg-yellow-900/10 rounded-sm">
+                        <div class="font-bold text-yellow-500 border-b border-yellow-500/30 pb-2 mb-2">Property</div>
+                        <div class="font-bold text-yellow-500 border-b border-yellow-500/30 pb-2 mb-2 hidden md:block">Value (relative to Earth)</div>
+
+                        <div class="text-yellow-400 py-1 border-b border-yellow-500/10 md:border-none">Diameter</div>
+                        <div class="py-1 border-b border-yellow-500/10">1.392 million km (109× Earth)</div>
+
+                        <div class="text-yellow-400 py-1 border-b border-yellow-500/10 md:border-none">Mass</div>
+                        <div class="py-1 border-b border-yellow-500/10">1.989 × 10³⁰ kg (333,000× Earth)</div>
+
+                        <div class="text-yellow-400 py-1 border-b border-yellow-500/10 md:border-none">Average density</div>
+                        <div class="py-1 border-b border-yellow-500/10">1.41 g/cm³ (0.256× Earth's density)</div>
+
+                        <div class="text-yellow-400 py-1 border-b border-yellow-500/10 md:border-none">Surface gravity</div>
+                        <div class="py-1 border-b border-yellow-500/10">274 m/s² (28× Earth)</div>
+
+                        <div class="text-yellow-400 py-1 border-b border-yellow-500/10 md:border-none">Luminosity</div>
+                        <div class="py-1 border-b border-yellow-500/10">3.828 × 10²⁶ W</div>
+
+                        <div class="text-yellow-400 py-1 border-b border-yellow-500/10 md:border-none">Surface temperature</div>
+                        <div class="py-1 border-b border-yellow-500/10">~5,500 °C (photosphere)</div>
+
+                        <div class="text-yellow-400 py-1 border-b border-yellow-500/10 md:border-none">Core temperature</div>
+                        <div class="py-1 border-b border-yellow-500/10">~15 million °C</div>
+
+                        <div class="text-yellow-400 py-1 border-b border-yellow-500/10 md:border-none">Rotation period</div>
+                        <div class="py-1 border-b border-yellow-500/10">~25 days at the equator, ~35 days near the poles (differential rotation)</div>
+
+                        <div class="text-yellow-400 py-1">Age</div>
+                        <div class="py-1">~4.603 billion years</div>
+                    </div>
+                </div>
+            `;
+
+        const page3 = `
+                <div class="space-y-6">
+                    <h3 class="text-xl md:text-2xl font-sci-fi text-yellow-400 mb-4 border-b border-yellow-500/30 pb-2">Composition by Mass</h3>
+                    <ul class="list-disc list-inside space-y-4 text-yellow-100/90 marker:text-yellow-500 text-base md:text-lg">
+                        <li><span class="text-yellow-500 font-bold">Hydrogen:</span> ~73.5%</li>
+                        <li><span class="text-yellow-500 font-bold">Helium:</span> ~24.9%</li>
+                        <li class="leading-relaxed"><span class="text-yellow-500 font-bold">Heavier elements (metals):</span> ~1.6% (oxygen, carbon, neon, iron, nitrogen, silicon, magnesium, sulfur, etc.)—remnants of earlier generations of stars.</li>
+                    </ul>
+                </div>
+            `;
+
+        const page4 = `
+                <div class="space-y-4">
+                    <h3 class="text-xl md:text-2xl font-sci-fi text-yellow-400 mb-6 border-b border-yellow-500/30 pb-2">Internal Structure: Layers of a Fiery Onion</h3>
+
+                    <details class="group border border-yellow-500/30 rounded-sm bg-yellow-900/10 transition-all duration-300">
+                        <summary class="p-4 flex items-center justify-between cursor-pointer font-sci-fi tracking-widest text-yellow-400 hover:bg-yellow-500/10 outline-none">
+                            4.1 Core (0–0.25 solar radii)
+                            <span class="text-yellow-600 transition group-open:rotate-180">▼</span>
+                        </summary>
+                        <div class="p-4 border-t border-yellow-500/30 text-sm md:text-base leading-relaxed text-yellow-100/80">
+                            The engine room. At ~15 million K and densities exceeding 150 g/cm³, hydrogen nuclei fuse into helium via the proton–proton chain (and a tiny fraction through the CNO cycle). Every second, about 600 million tons of hydrogen become 596 million tons of helium; the missing 4 million tons of mass become energy, per E=mc².
+                        </div>
+                    </details>
+
+                    <details class="group border border-yellow-500/30 rounded-sm bg-yellow-900/10 transition-all duration-300">
+                        <summary class="p-4 flex items-center justify-between cursor-pointer font-sci-fi tracking-widest text-yellow-400 hover:bg-yellow-500/10 outline-none">
+                            4.2 Radiative Zone (0.25–0.7 solar radii)
+                            <span class="text-yellow-600 transition group-open:rotate-180">▼</span>
+                        </summary>
+                        <div class="p-4 border-t border-yellow-500/30 text-sm md:text-base leading-relaxed text-yellow-100/80">
+                            Energy travels outward as electromagnetic radiation. Photons are absorbed and re-emitted countless times in a "random walk" that can take 100,000–200,000 years to cross this layer.
+                        </div>
+                    </details>
+
+                    <details class="group border border-yellow-500/30 rounded-sm bg-yellow-900/10 transition-all duration-300">
+                        <summary class="p-4 flex items-center justify-between cursor-pointer font-sci-fi tracking-widest text-yellow-400 hover:bg-yellow-500/10 outline-none">
+                            4.3 Tachocline
+                            <span class="text-yellow-600 transition group-open:rotate-180">▼</span>
+                        </summary>
+                        <div class="p-4 border-t border-yellow-500/30 text-sm md:text-base leading-relaxed text-yellow-100/80">
+                            A thin shear layer between the radiative and convective zones, likely the birthplace of the Sun’s global magnetic field.
+                        </div>
+                    </details>
+
+                    <details class="group border border-yellow-500/30 rounded-sm bg-yellow-900/10 transition-all duration-300">
+                        <summary class="p-4 flex items-center justify-between cursor-pointer font-sci-fi tracking-widest text-yellow-400 hover:bg-yellow-500/10 outline-none">
+                            4.4 Convective Zone (0.7–1 solar radii)
+                            <span class="text-yellow-600 transition group-open:rotate-180">▼</span>
+                        </summary>
+                        <div class="p-4 border-t border-yellow-500/30 text-sm md:text-base leading-relaxed text-yellow-100/80">
+                            Plasma rises in huge convection cells, cools near the surface, and sinks. This boiling motion generates sound waves and magnetic activity.
+                        </div>
+                    </details>
+
+                    <details class="group border border-yellow-500/30 rounded-sm bg-yellow-900/10 transition-all duration-300">
+                        <summary class="p-4 flex items-center justify-between cursor-pointer font-sci-fi tracking-widest text-yellow-400 hover:bg-yellow-500/10 outline-none">
+                            4.5 Photosphere
+                            <span class="text-yellow-600 transition group-open:rotate-180">▼</span>
+                        </summary>
+                        <div class="p-4 border-t border-yellow-500/30 text-sm md:text-base leading-relaxed text-yellow-100/80">
+                            The "visible surface," only ~100 km thick. It emits the white light we see, imprinted with absorption lines (Fraunhofer lines) that reveal its composition.
+                        </div>
+                    </details>
+
+                    <details class="group border border-yellow-500/30 rounded-sm bg-yellow-900/10 transition-all duration-300">
+                        <summary class="p-4 flex items-center justify-between cursor-pointer font-sci-fi tracking-widest text-yellow-400 hover:bg-yellow-500/10 outline-none">
+                            4.6 Chromosphere
+                            <span class="text-yellow-600 transition group-open:rotate-180">▼</span>
+                        </summary>
+                        <div class="p-4 border-t border-yellow-500/30 text-sm md:text-base leading-relaxed text-yellow-100/80">
+                            A thin, reddish layer visible during total solar eclipses. Temperature rises mysteriously from ~4,000 K to ~25,000 K here.
+                        </div>
+                    </details>
+
+                    <details class="group border border-yellow-500/30 rounded-sm bg-yellow-900/10 transition-all duration-300">
+                        <summary class="p-4 flex items-center justify-between cursor-pointer font-sci-fi tracking-widest text-yellow-400 hover:bg-yellow-500/10 outline-none">
+                            4.7 Transition Region
+                            <span class="text-yellow-600 transition group-open:rotate-180">▼</span>
+                        </summary>
+                        <div class="p-4 border-t border-yellow-500/30 text-sm md:text-base leading-relaxed text-yellow-100/80">
+                            A narrow, irregular layer where temperatures leap to over a million K.
+                        </div>
+                    </details>
+
+                    <details class="group border border-yellow-500/30 rounded-sm bg-yellow-900/10 transition-all duration-300">
+                        <summary class="p-4 flex items-center justify-between cursor-pointer font-sci-fi tracking-widest text-yellow-400 hover:bg-yellow-500/10 outline-none">
+                            4.8 Corona
+                            <span class="text-yellow-600 transition group-open:rotate-180">▼</span>
+                        </summary>
+                        <div class="p-4 border-t border-yellow-500/30 text-sm md:text-base leading-relaxed text-yellow-100/80">
+                            The Sun’s outer atmosphere, extending millions of kilometers. At 1–3 million K, it is far hotter than the photosphere—a puzzle known as the coronal heating problem, likely driven by magnetic reconnection and waves.
+                        </div>
+                    </details>
+                </div>
+            `;
+
+        const page5 = `
+                <div class="space-y-6">
+                    <h3 class="text-xl md:text-2xl font-sci-fi text-yellow-400 mb-4 border-b border-yellow-500/30 pb-2">How It Shines: Nuclear Fusion</h3>
+                    <p class="text-yellow-100/90 text-base md:text-lg">The dominant fusion reaction is the pp I chain:</p>
+                    <ul class="list-disc list-inside space-y-4 text-yellow-100/90 marker:text-yellow-500 text-base md:text-lg">
+                        <li>Two protons join to form deuterium (²H), releasing a positron and a neutrino.</li>
+                        <li>Deuterium captures a proton to form helium-3 (³He), emitting a gamma ray.</li>
+                        <li>Two ³He nuclei combine to form helium-4 (⁴He), releasing two protons.</li>
+                    </ul>
+                    <p class="text-yellow-100/90 text-base md:text-lg leading-relaxed border-t border-yellow-500/20 pt-4 mt-4">
+                        The energy leaks out as gamma rays (that become visible light by the surface) and neutrinos, which fly directly into space—providing a real-time window into the core.
+                    </p>
+                </div>
+            `;
+
+        const page6 = `
+                <div class="space-y-6">
+                    <h3 class="text-xl md:text-2xl font-sci-fi text-yellow-400 mb-4 border-b border-yellow-500/30 pb-2">Magnetic Soul: Activity and Cycles</h3>
+                    <p class="text-yellow-100/90 text-base md:text-lg">The Sun’s magnetic field is a dynamo generated by differential rotation and convection. Its behavior creates:</p>
+                    <ul class="list-disc list-inside space-y-4 text-yellow-100/90 marker:text-yellow-500 text-base md:text-lg">
+                        <li class="leading-relaxed"><span class="text-yellow-500 font-bold">Sunspots:</span> Cooler (3,800 K) magnetic knots that appear darker. They follow an ~11-year solar cycle of waxing and waning numbers.</li>
+                        <li class="leading-relaxed"><span class="text-yellow-500 font-bold">Solar flares:</span> Sudden explosions of magnetic energy, blasting radiation across the spectrum.</li>
+                        <li class="leading-relaxed"><span class="text-yellow-500 font-bold">Coronal mass ejections (CMEs):</span> Billion-ton clouds of plasma hurled into space at up to 3,000 km/s.</li>
+                        <li class="leading-relaxed"><span class="text-yellow-500 font-bold">Prominences:</span> Glowing arches of plasma suspended along magnetic field lines.</li>
+                        <li class="leading-relaxed"><span class="text-yellow-500 font-bold">Solar wind:</span> A continuous stream of charged particles (protons, electrons, alpha particles) flowing at 300–800 km/s, carving out the heliosphere—a magnetic bubble that envelops the planets and shields us from most galactic cosmic rays.</li>
+                    </ul>
+                </div>
+            `;
+
+        const page7 = `
+                <div class="space-y-6">
+                    <h3 class="text-xl md:text-2xl font-sci-fi text-yellow-400 mb-4 border-b border-yellow-500/30 pb-2">Earth’s Celestial Clock</h3>
+                    <ul class="list-disc list-inside space-y-4 text-yellow-100/90 marker:text-yellow-500 text-base md:text-lg">
+                        <li class="leading-relaxed"><span class="text-yellow-500 font-bold">Seasons:</span> Earth’s 23.5° axial tilt makes the Sun’s path wander, creating seasonal cycles.</li>
+                        <li class="leading-relaxed"><span class="text-yellow-500 font-bold">Eclipses:</span> Perfect serendipity—the Sun is 400 times wider than the Moon but also ~400 times farther away, making total solar eclipses possible.</li>
+                        <li class="leading-relaxed"><span class="text-yellow-500 font-bold">Space weather:</span> CMEs and flares can disrupt satellites, GPS, power grids, and aviation. Aurorae (northern/southern lights) are the beautiful face of solar storms.</li>
+                        <li class="leading-relaxed"><span class="text-yellow-500 font-bold">Climate driver:</span> The Sun’s small irradiance variations (~0.1% over the solar cycle) and long-term Milankovitch cycles pace Earth’s ice ages, though modern warming is dominated by greenhouse gases.</li>
+                    </ul>
+                </div>
+            `;
+
+        const page8 = `
+                <div class="space-y-6">
+                    <h3 class="text-xl md:text-2xl font-sci-fi text-yellow-400 mb-4 border-b border-yellow-500/30 pb-2">Human Observation and Exploration</h3>
+                    <ul class="list-disc list-inside space-y-4 text-yellow-100/90 marker:text-yellow-500 text-base md:text-lg">
+                        <li class="leading-relaxed"><span class="text-yellow-500 font-bold">Naked eye:</span> Feared and revered since prehistory.</li>
+                        <li class="leading-relaxed"><span class="text-yellow-500 font-bold">Galileo (1610):</span> First telescopic sunspot observations showed the Sun is not “perfect.”</li>
+                        <li class="leading-relaxed"><span class="text-yellow-500 font-bold">Spectroscopy (Fraunhofer, 1814):</span> Revealed its chemistry and founded astrophysics.</li>
+                        <li class="leading-relaxed"><span class="text-yellow-500 font-bold">Space age:</span> Helios, Ulysses, SOHO, STEREO, and the Solar Dynamics Observatory (SDO) watch in multiple wavelengths 24/7. Parker Solar Probe (NASA, 2018) is “touching the Sun,” flying through the corona. The Daniel K. Inouye Solar Telescope captures surface details as small as 30 km.</li>
+                        <li class="leading-relaxed"><span class="text-yellow-500 font-bold">Neutrino and gravitational wave astronomy:</span> Now probe the core directly and may one day sense deep internal oscillations.</li>
+                    </ul>
+                </div>
+            `;
+
+        const page9 = `
+                <div class="space-y-6">
+                    <h3 class="text-xl md:text-2xl font-sci-fi text-yellow-400 mb-4 border-b border-yellow-500/30 pb-2">Cultural and Mythological Tapestry</h3>
+                    <p class="text-yellow-100/90 text-base md:text-lg">Every human culture has woven the Sun into its story:</p>
+                    <ul class="list-disc list-inside space-y-4 text-yellow-100/90 marker:text-yellow-500 text-base md:text-lg">
+                        <li class="leading-relaxed"><span class="text-yellow-500 font-bold">Deities and myths:</span> Ra (Egypt), Helios (Greece), Sol (Rome), Surya (Hindu), Amaterasu (Japan), Inti (Inca), Tonatiuh (Aztec). Often the Sun is a god of life, justice, and power, riding a chariot or boat across the sky.</li>
+                        <li class="leading-relaxed"><span class="text-yellow-500 font-bold">Creation and apocalypse:</span> Solar eclipses were seen as devourings (dragons in China, wolf Sköll in Norse myth). The Sun’s rhythm anchors calendars—Stonehenge, Newgrange, the Mayan pyramids aligned to solstices.</li>
+                        <li class="leading-relaxed"><span class="text-yellow-500 font-bold">Symbolism:</span> Enlightenment, consciousness, royalty, the divine masculine principle (yang in Chinese philosophy, with the Moon as yin). In alchemy, gold—the perfect metal—was the Sun’s earthly counterpart.</li>
+                        <li class="leading-relaxed"><span class="text-yellow-500 font-bold">Art and literature:</span> From the poetry of Emily Dickinson (“I’ll tell you how the Sun rose—”) to Van Gogh’s swirling “Sower with Setting Sun,” to the countless anthems of sunrise as renewal.</li>
+                    </ul>
+                </div>
+            `;
+
+        const page10 = `
+                <div class="space-y-6">
+                    <h3 class="text-xl md:text-2xl font-sci-fi text-yellow-400 mb-4 border-b border-yellow-500/30 pb-2">The Sun and Living Systems</h3>
+                    <ul class="list-disc list-inside space-y-4 text-yellow-100/90 marker:text-yellow-500 text-base md:text-lg">
+                        <li class="leading-relaxed"><span class="text-yellow-500 font-bold">Photosynthesis:</span> The chloroplasts of plants capture solar photons and turn CO₂ and water into sugar, the foundation of almost every food web.</li>
+                        <li class="leading-relaxed"><span class="text-yellow-500 font-bold">Vitamin D:</span> Humans synthesize vitamin D under UV-B sunlight, critical for bone health, immune function, and mood.</li>
+                        <li class="leading-relaxed"><span class="text-yellow-500 font-bold">Circadian rhythms:</span> The rising/setting cycle entrains our body clocks via the suprachiasmatic nucleus, regulating sleep, metabolism, and mental health.</li>
+                        <li class="leading-relaxed"><span class="text-yellow-500 font-bold">Solar energy:</span> Photovoltaic cells and concentrated solar thermal systems directly harvest the Sun’s radiance, offering a crucial path to a sustainable civilization.</li>
+                        <li class="leading-relaxed"><span class="text-yellow-500 font-bold">Disinfector:</span> Ultraviolet light purifies water and kills pathogens—ancient knowledge now engineered.</li>
+                    </ul>
+                </div>
+            `;
+
+        const page11 = `
+                <div class="space-y-6">
+                    <h3 class="text-xl md:text-2xl font-sci-fi text-yellow-400 mb-4 border-b border-yellow-500/30 pb-2">The Future: A Star’s Life and Death</h3>
+                    <ul class="list-disc list-inside space-y-4 text-yellow-100/90 marker:text-yellow-500 text-base md:text-lg">
+                        <li class="leading-relaxed"><span class="text-yellow-500 font-bold">Now:</span> Middle-aged. The Sun has used roughly half its core hydrogen.</li>
+                        <li class="leading-relaxed"><span class="text-yellow-500 font-bold">Next 5 billion years:</span> As core hydrogen depletes, helium ash accumulates. The Sun will slowly brighten by ~10% per billion years. In about 1–2 billion years, Earth’s oceans will boil away, ending all life.</li>
+                        <li class="leading-relaxed"><span class="text-yellow-500 font-bold">Red giant phase (~5 billion years from now):</span> Core hydrogen exhausted, helium fusion ignites in a “helium flash.” The Sun swells to ~200 times its present radius, engulfing Mercury and Venus, possibly Earth. Its outer layers float away, forming a planetary nebula.</li>
+                        <li class="leading-relaxed"><span class="text-yellow-500 font-bold">Final state:</span> The core collapses into a white dwarf—a sphere of carbon and oxygen the size of Earth but with half the Sun’s mass, fading for tens of billions of years until it becomes a cold, dark black dwarf (a theoretical end, since the universe isn’t old enough for any to exist yet).</li>
+                    </ul>
+                </div>
+            `;
+
+        const page12 = `
+                <div class="space-y-6 flex flex-col h-full justify-center md:pb-12">
+                    <h3 class="text-xl md:text-2xl font-sci-fi text-yellow-400 mb-4 border-b border-yellow-500/30 pb-2">Philosophical Echo</h3>
+                    <div class="border-l-4 border-yellow-500/50 pl-6 py-4 bg-yellow-500/5 shadow-[inset_10px_0_20px_rgba(234,179,8,0.05)] relative mt-4">
+                        <div class="absolute -top-3 -left-3 text-4xl text-yellow-500/20 font-serif">"</div>
+                        <p class="text-yellow-100/90 text-lg md:text-xl leading-relaxed italic relative z-10">
+                            The Sun is both ordinary—one of 100 billion G-type stars in the Milky Way—and, for us, utterly singular. It has no story separate from our own: its warmth is our climate, its light our food, its history our origin. To explain the Sun is to explain why we are here, and why, in the distant cosmic dusk, we will one day no longer be.
+                        </p>
+                    </div>
+                </div>
+            `;
+
+        const sunAdvancedPages = [
+            page1, page2, page3, page4,
+            page5, page6, page7, page8,
+            page9, page10, page11, page12
+        ];
+
+        const gridContainer = document.getElementById('solar-system-grid');
+
+        // References to the new Sun Views
+        const viewSunMenu = document.getElementById('view-sun-menu');
+        const viewSunData = document.getElementById('view-sun-data');
+        const sunDataTitle = document.getElementById('sun-data-title');
+        const sunDataContent = document.getElementById('sun-data-content');
+        const paginationContainer = document.getElementById('pagination-container');
+
+        // Generate HTML for each celestial body
+        celestialBodies.forEach((body) => {
+            const card = document.createElement('div');
+            // Base classes for the box
+            card.className =
+                `sci-fi-box ${body.colorClass} border-t border-l border-white/10 rounded-sm p-6 flex flex-col justify-between min-h-[280px] shadow-lg group cursor-pointer hover:scale-105 transition-all duration-300`;
+            card.tabIndex = 0; // Make focusable
+
+            card.style.color = "inherit";
+
+            // Add hover glow manually to match color
+            card.addEventListener('mouseenter', () => {
+                card.style.boxShadow = `0 0 20px currentColor`;
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.boxShadow = `none`;
+            });
+
+            // Make the Sun specifically open the data core, others go to developing
+            card.addEventListener('click', () => {
+                if (body.id === 'sun') {
+                    hideAllViews();
+                    viewSunMenu.classList.remove('hidden');
+                    viewSunMenu.classList.add('flex');
+                } else {
+                    hideAllViews();
+                    viewDeveloping.classList.remove('hidden');
+                    viewDeveloping.classList.add('flex');
+                }
+            });
+
+            // Dynamic HTML Generation for the middle section depending on if it is the Sun
+            let middleContent = '';
+
+            if (body.id === 'sun') {
+                middleContent = `
+                        <!-- Middle Section: Realistic Sun -->
+                        <div class="flex-grow flex flex-col items-center justify-center relative my-4">
+                            <div class="relative w-24 h-24 flex items-center justify-center">
+                                <div class="solar-flare"></div>
+                                <div class="realistic-sun w-16 h-16 rounded-full relative z-10"></div>
+                            </div>
+                            <div class="mt-4 text-center">
+                                <p class="font-sci-fi text-sm md:text-base tracking-[0.2em] text-yellow-300 font-bold drop-shadow-[0_0_5px_rgba(253,224,71,0.8)]">
+                                    ACTIVE
+                                </p>
+                                <p class="text-[10px] text-yellow-500/60 font-mono mt-1 uppercase">Stellar Fusion Nominal</p>
+                            </div>
+                        </div>
+                        `;
+            } else {
+                middleContent = `
+                        <!-- Middle Section: "Developing" Status -->
+                        <div class="flex-grow flex flex-col items-center justify-center space-y-4 my-4 relative">
+                            <!-- Tailwind Spinner -->
+                            <div class="w-10 h-10 border-[3px] border-white/10 border-t-current rounded-full animate-spin"></div>
+
+                            <!-- Developing Text -->
+                            <div class="text-center">
+                                <p class="flex items-center justify-center font-sci-fi text-sm md:text-base tracking-[0.2em] animate-pulse text-white font-bold drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]">
+                                    <!-- SVG Warning Icon -->
+                                    <svg class="w-5 h-5 text-red-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                    DEVELOPING...
+                                </p>
+                                <p class="text-[10px] text-white/40 font-mono mt-2 uppercase">Awaiting telemetry data</p>
+                            </div>
+                        </div>
+                        `;
+            }
+
+            card.innerHTML = `
+                    <!-- Top Section: Data Headers with sysId at top-right -->
+                    <div class="flex justify-between items-start mb-4 border-b border-white/10 pb-2">
+                        <div>
+                            <h2 class="text-2xl font-sci-fi font-bold tracking-widest uppercase drop-shadow-[0_0_8px_currentColor]">${body.name}</h2>
+                            <p class="text-xs text-white/50 tracking-widest uppercase mt-1">${body.type}</p>
+                            <p class="text-[10px] text-current opacity-70 font-mono uppercase mt-1">DIST FROM EARTH: ${body.distance}</p>
+                        </div>
+                        <span class="text-xs font-mono opacity-50 whitespace-nowrap ml-4">${body.sysId}</span>
+                    </div>
+
+                    ${middleContent}
+
+                    <!-- Bottom Right Corner Deco -->
+                    <div class="corner-br"></div>
+                `;
+
+            gridContainer.appendChild(card);
+        });
+
+        // Generate Starfield Background randomly
+        function generateStars(n) {
+            let value = `${Math.floor(Math.random() * 2000)}px ${Math.floor(Math.random() * 2000)}px #FFF`;
+            for (let i = 2; i <= n; i++) {
+                value += `, ${Math.floor(Math.random() * 2000)}px ${Math.floor(Math.random() * 2000)}px #FFF`;
+            }
+            return value;
+        }
+
+        document.getElementById('stars').style.boxShadow = generateStars(700);
+        document.getElementById('stars').style.background = 'transparent';
+
+        document.getElementById('stars2').style.boxShadow = generateStars(200);
+        document.getElementById('stars2').style.background = 'transparent';
+
+        document.getElementById('stars3').style.boxShadow = generateStars(100);
+        document.getElementById('stars3').style.background = 'transparent';
+
+        // --- NAVIGATION LOGIC ---
+        const viewLanding = document.getElementById('view-landing');
+        const viewDeveloping = document.getElementById('view-developing');
+        const viewCurrentPlace = document.getElementById('view-current-place');
+        const viewGrid = document.getElementById('view-grid');
+
+        const systemsContainer = document.getElementById('systems-container');
+        const btnInitSystem = document.getElementById('btn-init-system');
+        const btnAlphaCentauri = document.getElementById('btn-alpha-centauri');
+        const navOptions = document.getElementById('nav-options');
+        const btnOptDeveloping = document.getElementById('btn-opt-current-place');
+        const btnOptGrid = document.getElementById('btn-opt-grid');
+        const btnBackToStart = document.getElementById('btn-back-to-start');
+        const btnBackFromRT = document.getElementById('btn-back-from-rt');
+
+        // Sun logic buttons
+        const btnSunBasic = document.getElementById('btn-sun-basic');
+        const btnSunAdvanced = document.getElementById('btn-sun-advanced');
+        const btnBackToGrid = document.getElementById('btn-back-to-grid');
+        const btnBackToSunMenu = document.getElementById('btn-back-to-sun-menu');
+
+        // RT Time & Fullscreen Controls
+        const btnTime1x = document.getElementById('btn-time-1x');
+        const btnTimeWeek = document.getElementById('btn-time-week');
+        const btnTimeMonth = document.getElementById('btn-time-month');
+        const btnTimeYear = document.getElementById('btn-time-year');
+        const btnTimeReset = document.getElementById('btn-time-reset');
+        const speedText = document.getElementById('rt-speed-text');
+
+        const rtBox = document.getElementById('rt-box');
+        const rtHeaderWrapper = document.getElementById('rt-header-wrapper');
+        const rtClockContainer = document.getElementById('rt-clock-container');
+        const rtFooter = document.getElementById('rt-footer');
+        const rtTimeControls = document.getElementById('rt-time-controls');
+        const rtCorner = document.getElementById('rt-corner');
+        const btnRTFullscreen = document.getElementById('btn-rt-fullscreen');
+        const rtZoomWrapper = document.getElementById('rt-zoom-wrapper');
+
+        const btnsBack = document.querySelectorAll('.btn-back');
+
+        let isSystemInitialized = false;
+        let isRTFullscreen = false;
+
+        // Hide all views helper
+        function hideAllViews() {
+            viewLanding.classList.add('hidden');
+            viewLanding.classList.remove('flex');
+
+            viewDeveloping.classList.add('hidden');
+            viewDeveloping.classList.remove('flex');
+
+            viewCurrentPlace.classList.add('hidden');
+            viewCurrentPlace.classList.remove('flex');
+
+            viewGrid.classList.add('hidden');
+            viewGrid.classList.remove('flex');
+
+            viewSunMenu.classList.add('hidden');
+            viewSunMenu.classList.remove('flex');
+
+            viewSunData.classList.add('hidden');
+            viewSunData.classList.remove('flex');
+        }
+
+        // --- Keplerian Orbit Real-Time, Time Travel, Tilt & Zoom Logic ---
+        let isRealTimeViewActive = false;
+        let simulatedDate = Date.now();
+        let timeMultiplier = 1; // 1 = Real time, 604800 = 1 week/sec etc.
+        let lastTimestamp = performance.now();
+        const j2000 = new Date('2000-01-01T12:00:00Z').getTime();
+
+        // Mouse Drag to Tilt Variables
+        let rtTiltAngle = 75; // Starting pitch angle
+        let isDraggingRight = false;
+        let lastMouseY = 0;
+
+        // Zoom Variables
+        let zoomScale = 1;
+        let panX = 0;
+        let panY = 0;
+
+        // Prevent context menu pop-up so we can safely right click and drag
+        rtBox.addEventListener('contextmenu', (e) => {
+            if (isRealTimeViewActive) e.preventDefault();
+        });
+
+        // Mouse Down (Right Click Detection)
+        rtBox.addEventListener('mousedown', (e) => {
+            if (!isRealTimeViewActive) return;
+            if (e.button === 2) {
+                isDraggingRight = true;
+                lastMouseY = e.clientY;
+                rtBox.style.cursor = 'ns-resize';
+                e.preventDefault();
+            }
+        });
+
+        // Mouse Move (Adjust Pitch)
+        window.addEventListener('mousemove', (e) => {
+            if (!isDraggingRight || !isRealTimeViewActive) return;
+
+            const deltaY = e.clientY - lastMouseY;
+            lastMouseY = e.clientY;
+
+            // Adjust tilt sensitivity
+            rtTiltAngle -= deltaY * 0.4;
+
+            // Clamp the angle between 0 (top-down view) and 90 (completely edge-on view)
+            if (rtTiltAngle < 0) rtTiltAngle = 0;
+            if (rtTiltAngle > 90) rtTiltAngle = 90;
+        });
+
+        // Mouse Up (Release)
+        window.addEventListener('mouseup', (e) => {
+            if (e.button === 2 && isDraggingRight) {
+                isDraggingRight = false;
+                rtBox.style.cursor = 'default';
+            }
+        });
+
+        // Scroll to Zoom (Magnify to Cursor)
+        rtBox.addEventListener('wheel', (e) => {
+            if (!isRealTimeViewActive) return;
+            e.preventDefault(); // Stop page from scrolling
+
+            // Get mouse position relative to the main container
+            const rect = rtBox.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            const zoomSpeed = 0.15;
+            // Determine zoom direction
+            const delta = e.deltaY < 0 ? 1 + zoomSpeed : 1 - zoomSpeed;
+
+            let newScale = zoomScale * delta;
+
+            // Enforce Limits
+            if (newScale <= 1) {
+                // Completely reset if zoomed out past the starting view
+                newScale = 1;
+                panX = 0;
+                panY = 0;
+            } else {
+                if (newScale > 50) newScale = 50; // Cap to 50x zoom max
+
+                // Adjust panning so the zoom happens precisely where the mouse is pointing
+                panX = mouseX - (mouseX - panX) * (newScale / zoomScale);
+                panY = mouseY - (mouseY - panY) * (newScale / zoomScale);
+            }
+
+            zoomScale = newScale;
+
+            if (rtZoomWrapper) {
+                rtZoomWrapper.style.transform = `translate(${panX}px, ${panY}px) scale(${zoomScale})`;
+            }
+        }, { passive: false }); // Passive false allows preventDefault
+
+        // Animation Loop
+        function updateOrbits(timestamp) {
+            if (!isRealTimeViewActive) return;
+
+            // Calculate deltaTime in milliseconds
+            const deltaTime = timestamp - lastTimestamp;
+            lastTimestamp = timestamp;
+
+            // Cap deltaTime to prevent huge jumps if tab was inactive
+            if (deltaTime < 1000) {
+                simulatedDate += deltaTime * timeMultiplier;
+            }
+
+            const d = (simulatedDate - j2000) / (1000 * 60 * 60 * 24);
+
+            const orbitalData = {
+                mercury: { L0: 252.25, n: 4.09233 },
+                venus: { L0: 181.98, n: 1.60213 },
+                earth: { L0: 100.46, n: 0.98560 },
+                mars: { L0: 355.45, n: 0.52402 },
+                jupiter: { L0: 34.40, n: 0.08308 },
+                saturn: { L0: 49.94, n: 0.03344 },
+                uranus: { L0: 313.23, n: 0.01172 },
+                neptune: { L0: 304.88, n: 0.00599 }
+            };
+
+            // Apply the user-controlled tilt angle dynamically
+            const rtContainer = document.getElementById('rt-system-container');
+            const rtSun = document.getElementById('rt-sun-wrapper');
+
+            if (rtContainer) rtContainer.style.transform = `rotateX(${rtTiltAngle}deg)`;
+            if (rtSun) rtSun.style.transform = `translate(-50%, -50%) rotateX(-${rtTiltAngle}deg)`;
+
+            for (const [planet, data] of Object.entries(orbitalData)) {
+                const currentAngle = (data.L0 + data.n * d) % 360;
+                const pivot = document.querySelector(`.rt-planet-pivot[data-planet="${planet}"]`);
+                if (pivot) {
+                    const sphere = pivot.querySelector('.rt-planet-sphere');
+
+                    // Rotate the pivot to the correct orbital degree
+                    pivot.style.transform = `translate(-50%, -50%) rotateZ(${currentAngle}deg)`;
+
+                    // Counter-rotate the sphere to keep it perfectly facing the camera, accounting for the dynamic tilt
+                    if (sphere) sphere.style.transform = `rotateZ(${-currentAngle}deg) rotateX(-${rtTiltAngle}deg)`;
+                }
+            }
+
+            // Update clock display with simulated time
+            const clockEl = document.getElementById('rt-clock-display');
+            if (clockEl) {
+                clockEl.textContent = new Date(simulatedDate).toUTCString().replace('GMT', 'UTC');
+            }
+
+            requestAnimationFrame(updateOrbits);
+        }
+
+        // Time Control Update Helper
+        function updateTimeControls(multiplier, label) {
+            timeMultiplier = multiplier;
+            if (speedText) speedText.textContent = label;
+
+            // Update button visual states
+            [btnTime1x, btnTimeWeek, btnTimeMonth, btnTimeYear].forEach(btn => {
+                if (btn) {
+                    btn.classList.remove('bg-green-500/20');
+                    btn.classList.add('bg-transparent');
+                }
+            });
+
+            if (multiplier === 1 && btnTime1x) btnTime1x.classList.add('bg-green-500/20');
+            if (multiplier === 604800 && btnTimeWeek) btnTimeWeek.classList.add('bg-green-500/20');
+            if (multiplier === 2592000 && btnTimeMonth) btnTimeMonth.classList.add('bg-green-500/20');
+            if (multiplier === 31557600 && btnTimeYear) btnTimeYear.classList.add('bg-green-500/20');
+        }
+
+        btnTime1x?.addEventListener('click', () => updateTimeControls(1, "1.0x (REAL-TIME)"));
+        // 1 real second = 7 simulated days (604,800 seconds)
+        btnTimeWeek?.addEventListener('click', () => updateTimeControls(604800, "604,800x (1 WK/SEC)"));
+        // 1 real second = 30 simulated days (2,592,000 seconds)
+        btnTimeMonth?.addEventListener('click', () => updateTimeControls(2592000, "2,592,000x (1 MO/SEC)"));
+        // 1 real second = 365.25 simulated days (31,557,600 seconds)
+        btnTimeYear?.addEventListener('click', () => updateTimeControls(31557600, "31,557,600x (1 YR/SEC)"));
+
+        btnTimeReset?.addEventListener('click', () => {
+            simulatedDate = Date.now();
+            updateTimeControls(1, "1.0x (REAL-TIME)");
+        });
+
+        // Toggle Full Screen Logic
+        btnRTFullscreen?.addEventListener('click', () => {
+            isRTFullscreen = !isRTFullscreen;
+
+            // Reset Zoom
+            zoomScale = 1;
+            panX = 0;
+            panY = 0;
+            if (rtZoomWrapper) rtZoomWrapper.style.transform = `translate(0px, 0px) scale(1)`;
+
+            if (isRTFullscreen) {
+                // Enter Immersive View
+                rtBox.classList.remove('max-w-[1000px]', 'sci-fi-box', 'bg-green-900/10', 'border-t', 'border-l',
+                    'border-green-400/50', 'rounded-sm', 'shadow-[0_0_30px_rgba(74,222,128,0.15)]', 'relative');
+                rtBox.classList.add('fixed', 'inset-0', 'z-50', 'bg-transparent');
+
+                if (rtHeaderWrapper) rtHeaderWrapper.style.display = 'none';
+                rtClockContainer.style.display = 'none';
+                rtFooter.style.display = 'none';
+                rtTimeControls.style.display = 'none';
+                rtCorner.style.display = 'none';
+                btnBackFromRT.style.display = 'none';
+
+                btnRTFullscreen.textContent = '[ Exit Full Screen ]';
+
+                // Scale up the 3D map
+                const mapContainer = rtBox.querySelector('.perspective-container');
+                if (mapContainer) {
+                    mapContainer.classList.remove('scale-[0.8]', 'sm:scale-100', 'md:scale-125', 'lg:scale-[1.4]');
+                    mapContainer.classList.add('scale-100', 'sm:scale-125', 'md:scale-150', 'lg:scale-[2.0]');
+                }
+            } else {
+                // Exit Immersive View
+                rtBox.classList.add('max-w-[1000px]', 'sci-fi-box', 'bg-green-900/10', 'border-t', 'border-l',
+                    'border-green-400/50', 'rounded-sm', 'shadow-[0_0_30px_rgba(74,222,128,0.15)]', 'relative');
+                rtBox.classList.remove('fixed', 'inset-0', 'z-50', 'bg-transparent');
+
+                if (rtHeaderWrapper) rtHeaderWrapper.style.display = '';
+                rtClockContainer.style.display = '';
+                rtFooter.style.display = '';
+                rtTimeControls.style.display = '';
+                rtCorner.style.display = '';
+                btnBackFromRT.style.display = '';
+
+                btnRTFullscreen.textContent = '[ Full Screen ]';
+
+                // Scale down the 3D map back to original
+                const mapContainer = rtBox.querySelector('.perspective-container');
+                if (mapContainer) {
+                    mapContainer.classList.add('scale-[0.8]', 'sm:scale-100', 'md:scale-125', 'lg:scale-[1.4]');
+                    mapContainer.classList.remove('scale-100', 'sm:scale-125', 'md:scale-150', 'lg:scale-[2.0]');
+                }
+            }
+        });
+
+        // --- Render Functions ---
+        function renderBasicPage(index) {
+            sunDataContent.innerHTML = sunBasicPages[index];
+
+            // Build the pagination row
+            paginationContainer.innerHTML = '';
+            for (let i = 0; i < 8; i++) {
+                const btn = document.createElement('button');
+                btn.textContent = i + 1;
+
+                // Style differences for active vs inactive pages
+                if (i === index) {
+                    btn.className =
+                        'w-8 h-8 md:w-10 md:h-10 flex items-center justify-center font-sci-fi text-sm md:text-base border border-yellow-300 bg-yellow-400/30 text-yellow-200 rounded-sm shadow-[0_0_10px_rgba(253,224,71,0.5)] transition-all duration-300 cursor-default';
+                } else {
+                    btn.className =
+                        'w-8 h-8 md:w-10 md:h-10 flex items-center justify-center font-sci-fi text-sm md:text-base border border-yellow-400/30 bg-transparent text-yellow-400/50 hover:bg-yellow-400/10 hover:text-yellow-300 hover:border-yellow-300/50 rounded-sm transition-all duration-300 cursor-pointer';
+                    btn.addEventListener('click', () => renderBasicPage(i));
+                }
+
+                paginationContainer.appendChild(btn);
+            }
+
+            paginationContainer.classList.remove('hidden');
+            paginationContainer.classList.add('flex');
+        }
+
+        function renderAdvancedPage(index) {
+            sunDataContent.innerHTML = sunAdvancedPages[index];
+
+            // Build the pagination row
+            paginationContainer.innerHTML = '';
+            for (let i = 0; i < 12; i++) {
+                const btn = document.createElement('button');
+                btn.textContent = i + 1;
+
+                // Style differences for active vs inactive pages
+                if (i === index) {
+                    btn.className =
+                        'w-8 h-8 md:w-10 md:h-10 flex items-center justify-center font-sci-fi text-sm md:text-base border border-yellow-400 bg-yellow-500/30 text-yellow-300 rounded-sm shadow-[0_0_10px_rgba(250,204,21,0.5)] transition-all duration-300 cursor-default';
+                } else {
+                    btn.className =
+                        'w-8 h-8 md:w-10 md:h-10 flex items-center justify-center font-sci-fi text-sm md:text-base border border-yellow-500/30 bg-transparent text-yellow-500/50 hover:bg-yellow-500/10 hover:text-yellow-400 hover:border-yellow-400/50 rounded-sm transition-all duration-300 cursor-pointer';
+                    btn.addEventListener('click', () => renderAdvancedPage(i));
+                }
+
+                paginationContainer.appendChild(btn);
+            }
+
+            paginationContainer.classList.remove('hidden');
+            paginationContainer.classList.add('flex');
+        }
+
+        // Show Landing Options (Solar System Click)
+        btnInitSystem?.addEventListener('click', () => {
+            if (isSystemInitialized) return;
+            isSystemInitialized = true;
+
+            systemsContainer.classList.add('hidden');
+            systemsContainer.classList.remove('grid');
+
+            navOptions.classList.remove('hidden');
+            navOptions.classList.add('flex');
+            void navOptions.offsetWidth; // Reflow
+            navOptions.classList.remove('opacity-0');
+        });
+
+        // Trigger Developing View on Alpha Centauri Click
+        btnAlphaCentauri?.addEventListener('click', () => {
+            hideAllViews();
+            viewDeveloping.classList.remove('hidden');
+            viewDeveloping.classList.add('flex');
+        });
+
+        // Go Back to Start (Initial State)
+        btnBackToStart?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            isSystemInitialized = false;
+
+            navOptions.classList.add('opacity-0');
+            setTimeout(() => {
+                navOptions.classList.add('hidden');
+                navOptions.classList.remove('flex');
+
+                systemsContainer.classList.remove('hidden');
+                systemsContainer.classList.add('grid');
+            }, 500);
+        });
+
+        // Go to Real-Time Planetary Positions
+        btnOptDeveloping?.addEventListener('click', () => {
+            hideAllViews();
+
+            // Reset Zoom
+            zoomScale = 1;
+            panX = 0;
+            panY = 0;
+            if (rtZoomWrapper) rtZoomWrapper.style.transform = `translate(0px, 0px) scale(1)`;
+
+            isRealTimeViewActive = true;
+            simulatedDate = Date.now();
+            updateTimeControls(1, "1.0x (REAL-TIME)");
+            lastTimestamp = performance.now();
+
+            // Initial render
+            rtTiltAngle = 75;
+            requestAnimationFrame(updateOrbits);
+
+            viewCurrentPlace.classList.remove('hidden');
+            viewCurrentPlace.classList.add('flex');
+        });
+
+        // Return from Real-Time Planatery Positions
+        btnBackFromRT?.addEventListener('click', () => {
+            isRealTimeViewActive = false;
+
+            // Reset Zoom
+            zoomScale = 1;
+            panX = 0;
+            panY = 0;
+            if (rtZoomWrapper) rtZoomWrapper.style.transform = `translate(0px, 0px) scale(1)`;
+
+            hideAllViews();
+            viewLanding.classList.remove('hidden');
+            viewLanding.classList.add('flex');
+
+            // Clean up full screen if user presses 'Back' while somehow in fullscreen
+            if (isRTFullscreen) {
+                btnRTFullscreen.click();
+            }
+        });
+
+        // Go to Grid View
+        btnOptGrid?.addEventListener('click', () => {
+            hideAllViews();
+            viewGrid.classList.remove('hidden');
+            viewGrid.classList.add('flex');
+        });
+
+        // Main Back Buttons (Return to landing)
+        btnsBack.forEach(btn => {
+            btn.addEventListener('click', () => {
+                hideAllViews();
+                viewLanding.classList.remove('hidden');
+                viewLanding.classList.add('flex');
+            });
+        });
+
+        // --- SUN SPECIFIC NAVIGATION ---
+
+        btnBackToGrid?.addEventListener('click', () => {
+            hideAllViews();
+            viewGrid.classList.remove('hidden');
+            viewGrid.classList.add('flex');
+        });
+
+        btnBackToSunMenu?.addEventListener('click', () => {
+            hideAllViews();
+            viewSunMenu.classList.remove('hidden');
+            viewSunMenu.classList.add('flex');
+        });
+
+        btnSunBasic?.addEventListener('click', () => {
+            hideAllViews();
+            sunDataTitle.textContent = "Sun details: BASIC☕";
+            sunDataTitle.className =
+                "text-2xl md:text-4xl font-sci-fi text-yellow-300 tracking-widest uppercase drop-shadow-[0_0_8px_rgba(253,224,71,0.5)]";
+
+            // Render the first basic page (index 0)
+            renderBasicPage(0);
+
+            viewSunData.classList.remove('hidden');
+            viewSunData.classList.add('flex');
+        });
+
+        btnSunAdvanced?.addEventListener('click', () => {
+            hideAllViews();
+            sunDataTitle.textContent = "Sun details : ADVANCED🧠";
+            sunDataTitle.className =
+                "text-2xl md:text-4xl font-sci-fi text-yellow-500 tracking-widest uppercase drop-shadow-[0_0_8px_rgba(234,179,8,0.5)]";
+
+            // Render the first advanced page (index 0)
+            renderAdvancedPage(0);
+
+            viewSunData.classList.remove('hidden');
+            viewSunData.classList.add('flex');
+        });
+    </script>
+</body>
+</html>
